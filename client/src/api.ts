@@ -66,9 +66,6 @@ export async function apiRequest<T>(
   return data as T;
 }
 
-// ---------------------------------------------------------------------------
-// API METHODS
-// ---------------------------------------------------------------------------
 
 export async function fetchMyTeam(): Promise<{
   inTeam: boolean;

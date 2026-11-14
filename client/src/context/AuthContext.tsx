@@ -96,8 +96,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const dynamicCategory = !data.team
           ? 'Solo Hacker'
           : data.team.leader_id === userId
-          ? 'Team Leader'
-          : 'Team Member';
+            ? 'Team Leader'
+            : 'Team Member';
         if (activeP) {
           showToast({
             type: 'info',
@@ -114,7 +114,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     [demoPersonas, showToast]
   );
 
-  // Initialize demo personas and user
+
   useEffect(() => {
     async function init() {
       setIsLoading(true);
@@ -141,7 +141,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     init();
   }, [loadUserData]);
 
-  // Connect to live SSE for zero-refresh board & team updates
+
   useEffect(() => {
     let eventSource: EventSource | null = null;
     let reconnectTimeout: any = null;

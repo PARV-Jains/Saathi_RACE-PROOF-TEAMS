@@ -1,4 +1,4 @@
--- Schema is intentionally unqualified so tests can load it into a throwaway schema.
+
 
 CREATE TABLE users (
   id         uuid PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -24,8 +24,7 @@ CREATE TABLE teams (
   UNIQUE (hackathon_id, name)
 );
 
--- hackathon_id is denormalised here (kept in sync by the service) so that the
--- "one team per user per hackathon" rule is a real UNIQUE index.
+
 CREATE TABLE team_members (
   id           uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   team_id      uuid NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
@@ -38,7 +37,7 @@ CREATE UNIQUE INDEX one_team_per_user_per_hackathon
   ON team_members (hackathon_id, user_id);
 CREATE INDEX team_members_team_joined ON team_members (team_id, joined_at, id);
 
--- Only the SHA-256 of the code is stored; the raw code is shown once at creation.
+
 CREATE TABLE invite_codes (
   id          uuid PRIMARY KEY DEFAULT gen_random_uuid(),
   team_id     uuid NOT NULL REFERENCES teams(id) ON DELETE CASCADE,
@@ -65,7 +64,7 @@ CREATE UNIQUE INDEX one_pending_request_per_user_team
 CREATE INDEX join_requests_user_pending
   ON join_requests (hackathon_id, user_id) WHERE status = 'pending';
 
--- Scoped per user; same key + different payload is rejected.
+
 CREATE TABLE idempotency_keys (
   user_id      uuid NOT NULL,
   key          text NOT NULL CHECK (length(key) BETWEEN 1 AND 255),
@@ -76,7 +75,7 @@ CREATE TABLE idempotency_keys (
   PRIMARY KEY (user_id, key)
 );
 
--- No FKs on purpose: audit rows must outlive deleted teams.
+
 CREATE TABLE audit_logs (
   id           bigserial PRIMARY KEY,
   at           timestamptz NOT NULL DEFAULT clock_timestamp(),
@@ -88,7 +87,7 @@ CREATE TABLE audit_logs (
 );
 CREATE INDEX audit_logs_team ON audit_logs (team_id, id);
 
--- Audit log is append-only.
+
 CREATE FUNCTION audit_logs_immutable() RETURNS trigger LANGUAGE plpgsql AS $$
 BEGIN RAISE EXCEPTION 'audit_logs is append-only'; END $$;
 CREATE TRIGGER audit_logs_no_update BEFORE UPDATE OR DELETE ON audit_logs

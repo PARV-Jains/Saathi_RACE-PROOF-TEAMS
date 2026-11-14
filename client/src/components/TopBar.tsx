@@ -168,10 +168,10 @@ export const TopBar: React.FC<TopBarProps> = ({
                   </span>
                   <span
                     className={`hidden sm:inline-block text-[10px] font-mono px-1.5 py-0.5 rounded uppercase font-semibold shrink-0 ${activeRole === 'LEADER'
-                        ? 'bg-sky-950 border border-sky-800/60 text-sky-300'
-                        : activeRole === 'MBR'
-                          ? 'bg-zinc-800 border border-zinc-700 text-zinc-300'
-                          : 'bg-emerald-950 border border-emerald-800/60 text-emerald-300'
+                      ? 'bg-sky-950 border border-sky-800/60 text-sky-300'
+                      : activeRole === 'MBR'
+                        ? 'bg-zinc-800 border border-zinc-700 text-zinc-300'
+                        : 'bg-emerald-950 border border-emerald-800/60 text-emerald-300'
                       }`}
                   >
                     {activeRole}

@@ -177,8 +177,8 @@ export const ConcurrencySimModal: React.FC<ConcurrencySimModalProps> = ({
                         <span className="text-zinc-200 font-semibold">{m.name}</span>
                         <span
                           className={`text-[9px] px-1 py-0.2 rounded uppercase ${m.role === 'LEADER'
-                              ? 'bg-sky-950 border border-sky-800 text-sky-300'
-                              : 'bg-emerald-950 border border-emerald-800 text-emerald-300'
+                            ? 'bg-sky-950 border border-sky-800 text-sky-300'
+                            : 'bg-emerald-950 border border-emerald-800 text-emerald-300'
                             }`}
                         >
                           {m.role}

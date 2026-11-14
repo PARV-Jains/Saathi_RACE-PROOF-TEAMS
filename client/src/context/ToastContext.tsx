@@ -54,15 +54,14 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           return (
             <div
               key={toast.id}
-              className={`pointer-events-auto rounded-lg p-3.5 bg-zinc-900 border text-zinc-100 shadow-xl transition-all duration-200 ${
-                isError
+              className={`pointer-events-auto rounded-lg p-3.5 bg-zinc-900 border text-zinc-100 shadow-xl transition-all duration-200 ${isError
                   ? 'border-rose-900/60 ring-1 ring-rose-500/20'
                   : isSuccess
-                  ? 'border-emerald-900/60 ring-1 ring-emerald-500/20'
-                  : isWarning
-                  ? 'border-amber-900/60 ring-1 ring-amber-500/20'
-                  : 'border-zinc-800'
-              }`}
+                    ? 'border-emerald-900/60 ring-1 ring-emerald-500/20'
+                    : isWarning
+                      ? 'border-amber-900/60 ring-1 ring-amber-500/20'
+                      : 'border-zinc-800'
+                }`}
             >
               <div className="flex items-start gap-3">
                 <div className="shrink-0 mt-0.5">

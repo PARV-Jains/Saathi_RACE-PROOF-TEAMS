@@ -61,7 +61,7 @@ const MainApp: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
             <span className="text-zinc-400 font-medium">
-              SAATHI // RACE PROOF TEAMS
+              SAATHI // RACE-PROOF TEAMS
             </span>
           </div>
           <div className="flex items-center gap-4 text-zinc-500 flex-wrap">

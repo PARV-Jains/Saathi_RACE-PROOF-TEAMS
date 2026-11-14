@@ -52,7 +52,7 @@ export const SuggestionsTab: React.FC = () => {
 
   return (
     <div className="space-y-4">
-      {/* Precision Formula Header */}
+
       <div className="rounded-lg bg-zinc-900 border border-zinc-800 p-4 space-y-3 font-mono text-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
@@ -83,7 +83,7 @@ export const SuggestionsTab: React.FC = () => {
           </div>
         </div>
 
-        {/* Desired Skills Pill */}
+
         {currentUser && (
           <div className="pt-2 flex flex-wrap items-center gap-2 text-xs border-t border-zinc-800/80">
             <span className="text-zinc-400">Target Match Skills:</span>
@@ -106,7 +106,7 @@ export const SuggestionsTab: React.FC = () => {
         )}
       </div>
 
-      {/* Loading Skeleton */}
+
       {loading && (
         <div className="space-y-2">
           {[1, 2, 3, 4].map((n) => (
@@ -121,7 +121,7 @@ export const SuggestionsTab: React.FC = () => {
         </div>
       )}
 
-      {/* Empty State */}
+
       {!loading && suggestions.length === 0 && (
         <div className="rounded-lg bg-zinc-900/40 border border-zinc-800 p-8 text-center space-y-2">
           <Users className="w-8 h-8 text-zinc-600 mx-auto" />
@@ -132,7 +132,7 @@ export const SuggestionsTab: React.FC = () => {
         </div>
       )}
 
-      {/* Ranked Candidate List */}
+
       {!loading && suggestions.length > 0 && (
         <div className="space-y-2 font-mono">
           {suggestions.map((s, idx) => {
@@ -151,13 +151,12 @@ export const SuggestionsTab: React.FC = () => {
                       {s.user.name}
                     </span>
                     <span
-                      className={`text-[10px] px-1.5 py-0.5 rounded font-bold border ${
-                        matchPercent >= 80
+                      className={`text-[10px] px-1.5 py-0.5 rounded font-bold border ${matchPercent >= 80
                           ? 'bg-emerald-950 border-emerald-800/80 text-emerald-300'
                           : matchPercent >= 50
-                          ? 'bg-amber-950 border-amber-800/80 text-amber-300'
-                          : 'bg-zinc-800 border-zinc-700 text-zinc-400'
-                      }`}
+                            ? 'bg-amber-950 border-amber-800/80 text-amber-300'
+                            : 'bg-zinc-800 border-zinc-700 text-zinc-400'
+                        }`}
                     >
                       {matchPercent}% MATCH
                     </span>
@@ -166,18 +165,17 @@ export const SuggestionsTab: React.FC = () => {
                     </span>
                   </div>
 
-                  {/* Skills */}
+
                   <div className="flex flex-wrap gap-1 pt-0.5">
                     {s.user.skills.map((skill) => {
                       const isMatched = matchedSet.has(skill.toLowerCase());
                       return (
                         <span
                           key={skill}
-                          className={`text-[10px] px-1.5 py-0.2 rounded border ${
-                            isMatched
+                          className={`text-[10px] px-1.5 py-0.2 rounded border ${isMatched
                               ? 'bg-emerald-950/60 border-emerald-800 text-emerald-300 font-semibold'
                               : 'bg-zinc-950 border-zinc-800 text-zinc-400'
-                          }`}
+                            }`}
                         >
                           {skill}
                         </span>
@@ -185,7 +183,7 @@ export const SuggestionsTab: React.FC = () => {
                     })}
                   </div>
 
-                  {/* Score Explanation Breakdown */}
+
                   <div className="text-[10px] text-zinc-400 pt-0.5 flex items-center gap-3 flex-wrap">
                     <span>Skill Match: {Math.round(s.explanation.skillScore * 100)}% (65% weight)</span>
                     <span>·</span>
