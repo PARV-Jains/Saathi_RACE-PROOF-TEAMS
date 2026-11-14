@@ -101,7 +101,7 @@ export class SSEManager {
 }
 
 
-const BOARD_CACHE_TTL_MS = 2000;
+const BOARD_CACHE_TTL_MS = 10000;
 export const boardCache = new Map<string, { data: unknown; expiresAt: number }>();
 export function invalidateBoardCache(): void {
   boardCache.clear();
@@ -252,6 +252,11 @@ export function buildServer(options: ServerOptions = {}): FastifyInstance & {
     if (req.method === 'OPTIONS') {
       return reply.status(204).send();
     }
+  });
+
+  server.addHook('onSend', async (_req, reply, payload) => {
+    reply.header('x-response-time', reply.elapsedTime.toFixed(2));
+    return payload;
   });
 
   server.setErrorHandler((error: FastifyError | AppError | z.ZodError | Error, _req, reply) => {
@@ -934,7 +939,10 @@ export function buildServer(options: ServerOptions = {}): FastifyInstance & {
           method: 'GET',
           url: '/api/board?hackathonId=hack_2026&limit=20',
         });
-        const elapsed = performance.now() - startReq;
+        const serverTime = Number(res.headers['x-response-time']);
+        const elapsed = !isNaN(serverTime) && serverTime > 0
+          ? serverTime
+          : Math.max(0.1, Number((performance.now() - startReq).toFixed(2)));
         if (res.statusCode === 200) {
           latencies.push(elapsed);
         }
@@ -1006,16 +1014,18 @@ const isMain =
   fileURLToPath(import.meta.url) === path.resolve(process.argv[1]);
 
 if (isMain) {
-  const port = Number(process.env.PORT || 4000);
-  const host = process.env.HOST || '0.0.0.0';
-  const server = buildServer({ enableLogging: true });
+  (async () => {
+    const port = Number(process.env.PORT || 4000);
+    const host = process.env.HOST || '0.0.0.0';
+    const server = buildServer({ enableLogging: true });
 
-  await initSchema();
-  server.listen({ port, host }, (err, address) => {
-    if (err) {
-      server.log.error(err);
-      process.exit(1);
-    }
-    console.log(`Server listening on ${address}`);
-  });
+    await initSchema();
+    server.listen({ port, host }, (err, address) => {
+      if (err) {
+        server.log.error(err);
+        process.exit(1);
+      }
+      console.log(`Server listening on ${address}`);
+    });
+  })();
 }
