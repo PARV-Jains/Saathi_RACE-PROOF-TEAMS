@@ -339,20 +339,26 @@ export const ScaleModal: React.FC<ScaleModalProps> = ({ isOpen, onClose }) => {
           </div>
 
           {probeResult && (
-            <div className="p-3.5 rounded bg-zinc-900 border border-emerald-900/60 space-y-2.5 animate-in fade-in duration-200 font-mono text-xs">
+            <div className={`p-3.5 rounded bg-zinc-900 border ${probeResult.p95Ms < 200 ? 'border-emerald-900/60' : 'border-amber-900/60'} space-y-2.5 animate-in fade-in duration-200 font-mono text-xs`}>
               <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
                 <span className="text-zinc-200 font-semibold flex items-center gap-1.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                   100 Concurrent Requests Benchmark Results:
                 </span>
-                <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-950 border border-emerald-800 text-emerald-300">
-                  p95: {probeResult.p95Ms}ms &lt; 200ms TARGET ✅
-                </span>
+                {probeResult.p95Ms < 200 ? (
+                  <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-emerald-950 border border-emerald-800 text-emerald-300">
+                    p95: {probeResult.p95Ms}ms &lt; 200ms TARGET ✅
+                  </span>
+                ) : (
+                  <span className="px-2 py-0.5 rounded text-[11px] font-bold bg-amber-950 border border-amber-800 text-amber-300">
+                    p95: {probeResult.p95Ms}ms (Target: &lt; 200ms) ⚠️
+                  </span>
+                )}
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px]">
                 <div className="p-2 rounded bg-zinc-950/80 border border-zinc-800">
                   <span className="text-zinc-400 block text-[10px]">Server p95 Latency</span>
-                  <span className="font-bold text-emerald-300 text-base">{probeResult.p95Ms} ms</span>
+                  <span className={`font-bold text-base ${probeResult.p95Ms < 200 ? 'text-emerald-300' : 'text-amber-300'}`}>{probeResult.p95Ms} ms</span>
                   <span className="text-[10px] text-zinc-500 block">&lt; 200ms threshold</span>
                 </div>
                 <div className="p-2 rounded bg-zinc-950/80 border border-zinc-800">
@@ -371,9 +377,15 @@ export const ScaleModal: React.FC<ScaleModalProps> = ({ isOpen, onClose }) => {
                   <span className="text-[10px] text-emerald-400 block">Wire Round-Trip</span>
                 </div>
               </div>
-              <p className="text-[11px] text-zinc-400">
-                ✅ All {probeResult.succeeded} / {probeResult.totalRequests} requests completed successfully with 0 errors. Server p95 latency is {probeResult.p95Ms} ms, easily passing the sub-200ms PS requirement.
-              </p>
+              {probeResult.p95Ms < 200 ? (
+                <p className="text-[11px] text-zinc-400">
+                  ✅ All {probeResult.succeeded} / {probeResult.totalRequests} requests completed successfully with 0 errors. Server p95 latency is {probeResult.p95Ms} ms, easily passing the sub-200ms PS requirement.
+                </p>
+              ) : (
+                <p className="text-[11px] text-amber-400">
+                  ⚠️ Completed {probeResult.succeeded} / {probeResult.totalRequests} requests. Server p95 latency was {probeResult.p95Ms} ms against the 200ms target threshold.
+                </p>
+              )}
             </div>
           )}
         </div>

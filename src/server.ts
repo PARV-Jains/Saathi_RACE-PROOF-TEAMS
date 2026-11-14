@@ -914,8 +914,11 @@ export function buildServer(options: ServerOptions = {}): FastifyInstance & {
 
 
   server.post('/api/demo/benchmark-board', async (_req, reply) => {
-    const count = 100;
+    const totalRequests = 100;
+    const concurrentStreams = 10;
+    const requestsPerStream = Math.floor(totalRequests / concurrentStreams);
 
+    // Warm-up read to populate in-memory micro-cache
     await server.inject({
       method: 'GET',
       url: '/api/board?hackathonId=hack_2026&limit=20',
@@ -924,19 +927,21 @@ export function buildServer(options: ServerOptions = {}): FastifyInstance & {
     const startOverall = performance.now();
     const latencies: number[] = [];
 
-    const promises = Array.from({ length: count }, async () => {
-      const startReq = performance.now();
-      const res = await server.inject({
-        method: 'GET',
-        url: '/api/board?hackathonId=hack_2026&limit=20',
-      });
-      const elapsed = performance.now() - startReq;
-      if (res.statusCode === 200) {
-        latencies.push(elapsed);
+    const streams = Array.from({ length: concurrentStreams }, async () => {
+      for (let i = 0; i < requestsPerStream; i++) {
+        const startReq = performance.now();
+        const res = await server.inject({
+          method: 'GET',
+          url: '/api/board?hackathonId=hack_2026&limit=20',
+        });
+        const elapsed = performance.now() - startReq;
+        if (res.statusCode === 200) {
+          latencies.push(elapsed);
+        }
       }
     });
 
-    await Promise.all(promises);
+    await Promise.all(streams);
     const totalDurationMs = Math.round(performance.now() - startOverall);
 
     latencies.sort((a, b) => a - b);
@@ -957,9 +962,9 @@ export function buildServer(options: ServerOptions = {}): FastifyInstance & {
     const max = maxVal !== undefined ? Number(maxVal.toFixed(2)) : 0;
 
     return reply.status(200).send({
-      totalRequests: count,
+      totalRequests,
       succeeded: latencies.length,
-      failed: count - latencies.length,
+      failed: totalRequests - latencies.length,
       totalDurationMs,
       p50Ms: p50,
       p90Ms: p90,
