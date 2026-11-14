@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1010" width="1000" height="1010" font-family="Inter, -apple-system, 'Segoe UI', sans-serif">
+<title>Team formation data model</title>
+<style>
+  .th{font:600 14px 'JetBrains Mono','SF Mono',Menlo,monospace;fill:#fff;letter-spacing:.3px}
+  .cn{font:500 13px 'JetBrains Mono','SF Mono',Menlo,monospace;fill:#0f172a}
+  .ct{font:12px 'JetBrains Mono','SF Mono',Menlo,monospace;fill:#64748b}
+  .nt{font:italic 11.5px Inter,-apple-system,'Segoe UI',sans-serif;fill:#b45309}
+  .bd{font:700 9px Inter,-apple-system,sans-serif;letter-spacing:.4px}
+  .pk{fill:#fef3c7;stroke:#f59e0b;stroke-width:.8}.pkt{fill:#92400e}
+  .fk{fill:#e0e7ff;stroke:#818cf8;stroke-width:.8}.fkt{fill:#3730a3}
+  .rel{stroke:#64748b;stroke-width:1.6;fill:none;stroke-linejoin:round}
+  .lb{fill:#f8fafc;stroke:#cbd5e1}.lt{font:600 10.5px Inter,-apple-system,sans-serif;fill:#475569}
+  .lg{font:12px Inter,-apple-system,sans-serif;fill:#475569}
+</style>
+<rect width="1000" height="1010" fill="#f8fafc"/>
+<pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#e2e8f0"/></pattern>
+<rect width="1000" height="1010" fill="url(#g)"/>
+<path d="M450 174 V222 H185 V270" class="rel"/>
+<line x1="444" x2="456" y1="186" y2="186" class="rel"/>
+<line x1="185" y1="258" x2="178" y2="270" class="rel"/><line x1="185" y1="258" x2="185" y2="270" class="rel"/><line x1="185" y1="258" x2="192" y2="270" class="rel"/>
+<rect x="297" y="212" width="42" height="20" rx="10" class="lb"/><text x="318" y="226" text-anchor="middle" class="lt">1 : N</text>
+<path d="M550 174 V222 H815 V270" class="rel"/>
+<line x1="544" x2="556" y1="186" y2="186" class="rel"/>
+<line x1="815" y1="258" x2="808" y2="270" class="rel"/><line x1="815" y1="258" x2="815" y2="270" class="rel"/><line x1="815" y1="258" x2="822" y2="270" class="rel"/>
+<rect x="661" y="212" width="42" height="20" rx="10" class="lb"/><text x="682" y="226" text-anchor="middle" class="lt">1 : N</text>
+<path d="M185 434 V600 H300" class="rel"/>
+<line x1="185" y1="446" x2="178" y2="434" class="rel"/><line x1="185" y1="446" x2="185" y2="434" class="rel"/><line x1="185" y1="446" x2="192" y2="434" class="rel"/>
+<line x1="288" x2="288" y1="594" y2="606" class="rel"/>
+<rect x="164" y="510" width="42" height="20" rx="10" class="lb"/><text x="185" y="524" text-anchor="middle" class="lt">N : 1</text>
+<path d="M815 434 V600 H700" class="rel"/>
+<line x1="815" y1="446" x2="808" y2="434" class="rel"/><line x1="815" y1="446" x2="815" y2="434" class="rel"/><line x1="815" y1="446" x2="822" y2="434" class="rel"/>
+<line x1="712" x2="712" y1="594" y2="606" class="rel"/>
+<rect x="794" y="510" width="42" height="20" rx="10" class="lb"/><text x="815" y="524" text-anchor="middle" class="lt">N : 1</text>
+<path d="M400 726 V758 H185 V790" class="rel"/>
+<line x1="394" x2="406" y1="738" y2="738" class="rel"/>
+<line x1="185" y1="778" x2="178" y2="790" class="rel"/><line x1="185" y1="778" x2="185" y2="790" class="rel"/><line x1="185" y1="778" x2="192" y2="790" class="rel"/>
+<rect x="271" y="748" width="42" height="20" rx="10" class="lb"/><text x="292" y="762" text-anchor="middle" class="lt">1 : N</text>
+<path d="M600 726 V758 H815 V790" class="rel"/>
+<line x1="594" x2="606" y1="738" y2="738" class="rel"/>
+<line x1="815" y1="778" x2="808" y2="790" class="rel"/><line x1="815" y1="778" x2="815" y2="790" class="rel"/><line x1="815" y1="778" x2="822" y2="790" class="rel"/>
+<rect x="687" y="748" width="42" height="20" rx="10" class="lb"/><text x="708" y="762" text-anchor="middle" class="lt">1 : N</text>
+
+<g>
+  <rect x="370" y="43" width="260" height="134" rx="8" fill="#0f172a" opacity="0.07"/>
+  <rect x="370" y="40" width="260" height="134" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <path d="M370 76 V48 a8 8 0 0 1 8 -8 H622 a8 8 0 0 1 8 8 V76 Z" fill="#334155"/>
+  <text x="384" y="63" class="th">users</text>
+  <rect x="382" y="88" width="26" height="16" rx="3" class="pk"/>
+  <text x="395" y="100" text-anchor="middle" class="bd pkt">PK</text>
+  <text x="418" y="100" class="cn">id</text>
+  <text x="616" y="100" text-anchor="end" class="ct">UUID</text>
+  <line x1="380" x2="620" y1="110" y2="110" stroke="#eef2f6"/>
+  <text x="418" y="130" class="cn">skills</text>
+  <text x="616" y="130" text-anchor="end" class="ct">TEXT[]</text>
+  <line x1="380" x2="620" y1="140" y2="140" stroke="#eef2f6"/>
+  <text x="418" y="160" class="cn">tz_offset</text>
+  <text x="616" y="160" text-anchor="end" class="ct">NUM</text>
+</g>
+<g>
+  <rect x="40" y="273" width="290" height="164" rx="8" fill="#0f172a" opacity="0.07"/>
+  <rect x="40" y="270" width="290" height="164" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <path d="M40 306 V278 a8 8 0 0 1 8 -8 H322 a8 8 0 0 1 8 8 V306 Z" fill="#0f766e"/>
+  <text x="54" y="293" class="th">team_members</text>
+  <rect x="52" y="318" width="26" height="16" rx="3" class="fk"/>
+  <text x="65" y="330" text-anchor="middle" class="bd fkt">FK</text>
+  <text x="88" y="330" class="cn">team_id</text>
+  <line x1="50" x2="320" y1="340" y2="340" stroke="#eef2f6"/>
+  <rect x="52" y="348" width="26" height="16" rx="3" class="fk"/>
+  <text x="65" y="360" text-anchor="middle" class="bd fkt">FK</text>
+  <text x="88" y="360" class="cn">user_id</text>
+  <line x1="50" x2="320" y1="370" y2="370" stroke="#eef2f6"/>
+  <text x="88" y="390" class="cn">role</text>
+  <text x="316" y="390" text-anchor="end" class="ct">LEAD / MBR</text>
+  <line x1="50" x2="320" y1="400" y2="400" stroke="#eef2f6"/>
+  <text x="88" y="420" class="cn">joined_at</text>
+</g>
+<g>
+  <rect x="670" y="273" width="290" height="164" rx="8" fill="#0f172a" opacity="0.07"/>
+  <rect x="670" y="270" width="290" height="164" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <path d="M670 306 V278 a8 8 0 0 1 8 -8 H952 a8 8 0 0 1 8 8 V306 Z" fill="#0f766e"/>
+  <text x="684" y="293" class="th">join_requests</text>
+  <rect x="682" y="318" width="26" height="16" rx="3" class="pk"/>
+  <text x="695" y="330" text-anchor="middle" class="bd pkt">PK</text>
+  <text x="718" y="330" class="cn">id</text>
+  <text x="946" y="330" text-anchor="end" class="ct">UUID</text>
+  <line x1="680" x2="950" y1="340" y2="340" stroke="#eef2f6"/>
+  <rect x="682" y="348" width="26" height="16" rx="3" class="fk"/>
+  <text x="695" y="360" text-anchor="middle" class="bd fkt">FK</text>
+  <text x="718" y="360" class="cn">team_id</text>
+  <line x1="680" x2="950" y1="370" y2="370" stroke="#eef2f6"/>
+  <rect x="682" y="378" width="26" height="16" rx="3" class="fk"/>
+  <text x="695" y="390" text-anchor="middle" class="bd fkt">FK</text>
+  <text x="718" y="390" class="cn">user_id</text>
+  <line x1="680" x2="950" y1="400" y2="400" stroke="#eef2f6"/>
+  <text x="718" y="420" class="cn">status</text>
+  <text x="946" y="420" text-anchor="end" class="ct">PEND / ACCPT / DECL</text>
+</g>
+<g>
+  <rect x="300" y="503" width="400" height="226" rx="8" fill="#0f172a" opacity="0.07"/>
+  <rect x="300" y="500" width="400" height="226" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <path d="M300 536 V508 a8 8 0 0 1 8 -8 H692 a8 8 0 0 1 8 8 V536 Z" fill="#1e3a8a"/>
+  <text x="314" y="523" class="th">teams</text>
+  <rect x="312" y="548" width="26" height="16" rx="3" class="pk"/>
+  <text x="325" y="560" text-anchor="middle" class="bd pkt">PK</text>
+  <text x="348" y="560" class="cn">id</text>
+  <text x="686" y="560" text-anchor="end" class="ct">UUID</text>
+  <line x1="310" x2="690" y1="570" y2="570" stroke="#eef2f6"/>
+  <text x="348" y="590" class="cn">hackathon_id</text>
+  <line x1="310" x2="690" y1="600" y2="600" stroke="#eef2f6"/>
+  <text x="348" y="620" class="cn">min/max_size</text>
+  <line x1="310" x2="690" y1="630" y2="630" stroke="#eef2f6"/>
+  <text x="348" y="650" class="cn">current_cnt</text>
+  <text x="348" y="666" class="nt">Denormalized for O(1) in-lock checks</text>
+  <line x1="310" x2="690" y1="676" y2="676" stroke="#eef2f6"/>
+  <text x="348" y="696" class="cn">is_looking</text>
+  <text x="348" y="712" class="nt">Filtered partial index for live board</text>
+</g>
+<g>
+  <rect x="40" y="793" width="290" height="164" rx="8" fill="#0f172a" opacity="0.07"/>
+  <rect x="40" y="790" width="290" height="164" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <path d="M40 826 V798 a8 8 0 0 1 8 -8 H322 a8 8 0 0 1 8 8 V826 Z" fill="#7c5a1a"/>
+  <text x="54" y="813" class="th">invite_codes</text>
+  <rect x="52" y="838" width="26" height="16" rx="3" class="pk"/>
+  <text x="65" y="850" text-anchor="middle" class="bd pkt">PK</text>
+  <text x="88" y="850" class="cn">code</text>
+  <text x="316" y="850" text-anchor="end" class="ct">TEXT</text>
+  <line x1="50" x2="320" y1="860" y2="860" stroke="#eef2f6"/>
+  <rect x="52" y="868" width="26" height="16" rx="3" class="fk"/>
+  <text x="65" y="880" text-anchor="middle" class="bd fkt">FK</text>
+  <text x="88" y="880" class="cn">team_id</text>
+  <line x1="50" x2="320" y1="890" y2="890" stroke="#eef2f6"/>
+  <text x="88" y="910" class="cn">expires_at</text>
+  <line x1="50" x2="320" y1="920" y2="920" stroke="#eef2f6"/>
+  <text x="88" y="940" class="cn">revoked</text>
+  <text x="316" y="940" text-anchor="end" class="ct">BOOL</text>
+</g>
+<g>
+  <rect x="670" y="793" width="290" height="210" rx="8" fill="#0f172a" opacity="0.07"/>
+  <rect x="670" y="790" width="290" height="210" rx="8" fill="#fff" stroke="#cbd5e1"/>
+  <path d="M670 826 V798 a8 8 0 0 1 8 -8 H952 a8 8 0 0 1 8 8 V826 Z" fill="#7c5a1a"/>
+  <text x="684" y="813" class="th">audit_logs</text>
+  <rect x="682" y="838" width="26" height="16" rx="3" class="pk"/>
+  <text x="695" y="850" text-anchor="middle" class="bd pkt">PK</text>
+  <text x="718" y="850" class="cn">id</text>
+  <text x="946" y="850" text-anchor="end" class="ct">UUID</text>
+  <line x1="680" x2="950" y1="860" y2="860" stroke="#eef2f6"/>
+  <text x="718" y="880" class="cn">team_id</text>
+  <text x="946" y="880" text-anchor="end" class="ct">UUID</text>
+  <text x="718" y="896" class="nt">No FK: persists past team delete</text>
+  <line x1="680" x2="950" y1="906" y2="906" stroke="#eef2f6"/>
+  <rect x="682" y="914" width="26" height="16" rx="3" class="fk"/>
+  <text x="695" y="926" text-anchor="middle" class="bd fkt">FK</text>
+  <text x="718" y="926" class="cn">actor_id</text>
+  <line x1="680" x2="950" y1="936" y2="936" stroke="#eef2f6"/>
+  <text x="718" y="956" class="cn">action</text>
+  <text x="946" y="956" text-anchor="end" class="ct">TEXT</text>
+  <line x1="680" x2="950" y1="966" y2="966" stroke="#eef2f6"/>
+  <text x="718" y="986" class="cn">metadata</text>
+  <text x="946" y="986" text-anchor="end" class="ct">JSON</text>
+</g>
+
+<g transform="translate(40,44)">
+  <rect x="0" y="0" width="26" height="16" rx="3" class="pk"/><text x="13" y="12" text-anchor="middle" class="bd pkt">PK</text>
+  <text x="34" y="12" class="lg">primary key</text>
+  <rect x="0" y="26" width="26" height="16" rx="3" class="fk"/><text x="13" y="38" text-anchor="middle" class="bd fkt">FK</text>
+  <text x="34" y="38" class="lg">foreign key</text>
+</g>
+</svg>

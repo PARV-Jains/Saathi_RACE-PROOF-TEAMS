@@ -8,51 +8,7 @@
 
 The schema is normalized for transactional integrity while maintaining strategic denormalizations for high-throughput reads:
 
-```
-               ┌──────────────┐
-               │    users     │
-               ├──────────────┤
-               │ id (UUID) PK │
-               │ skills TEXT[]│
-               │ tz_offset NUM│
-               └──────┬───────┘
-                      │ 1:N
-       ┌──────────────┴──────────────┐
-       ▼                             ▼
-┌──────────────┐              ┌──────────────┐
-│ team_members │              │join_requests │
-├──────────────┤              ├──────────────┤
-│ team_id  FK  │              │ id (UUID) PK │
-│ user_id  FK  │              │ team_id  FK  │
-│ role (LEAD/  │              │ user_id  FK  │
-│       MBR)   │              │ status (PEND/│
-│ joined_at    │              │  ACCPT/DECL) │
-└──────┬───────┘              └──────┬───────┘
-       │ N:1                         │ N:1
-       └──────────────┬──────────────┘
-                      ▼
-               ┌──────────────┐
-               │    teams     │
-               ├──────────────┤
-               │ id (UUID) PK │
-               │ hackathon_id │
-               │ min/max_size │
-               │ current_cnt  │◄── Denormalized for O(1) in-lock checks
-               │ is_looking   │◄── Filtered partial index for live board
-               └──────┬───────┘
-                      │ 1:N
-       ┌──────────────┴──────────────┐
-       ▼                             ▼
-┌──────────────┐              ┌──────────────┐
-│ invite_codes │              │  audit_logs  │
-├──────────────┤              ├──────────────┤
-│ code TEXT PK │              │ id (UUID) PK │
-│ team_id  FK  │              │ team_id UUID │◄── No FK: persists past team delete
-│ expires_at   │              │ actor_id FK  │
-│ revoked BOOL │              │ action TEXT  │
-└──────────────┘              │ metadata JSON│
-                              └──────────────┘
-```
+![Saathi Relational Data Model](docs/data-model.svg)
 
 ### Invariants Enforced at Schema Level
 - **One Team Per User Per Hackathon:** `CONSTRAINT one_team_per_user_per_hackathon UNIQUE (hackathon_id, user_id)` on `team_members`.
