@@ -4,15 +4,15 @@
   "description": "Saathi - race-proof team formation",
   "type": "module",
   "scripts": {
-    "start": "tsx --env-file=.env src/server.ts",
+    "start": "tsx src/server.ts",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down -v",
-    "dev": "tsx --env-file=.env watch src/server.ts",
+    "dev": "tsx watch src/server.ts",
     "dev:client": "npm --prefix client run dev",
     "build:client": "npm --prefix client run build",
     "build": "npm --prefix client run build",
-    "seed": "tsx --env-file=.env scripts/seed.ts",
-    "loadtest": "tsx --env-file=.env scripts/load-test.ts",
+    "seed": "tsx scripts/seed.ts",
+    "loadtest": "tsx scripts/load-test.ts",
     "test": "vitest run",
     "test:race": "vitest run tests/race.test.ts",
     "test:api": "vitest run tests/api.test.ts",
@@ -23,13 +23,13 @@
     "dotenv": "^18.0.10",
     "fastify": "^5.0.0",
     "pg": "^8.13.1",
+    "tsx": "^4.19.1",
     "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/node": "^22.9.0",
     "@types/pg": "^8.11.10",
     "autocannon": "^8.0.0",
-    "tsx": "^4.19.1",
     "typescript": "^5.6.3",
     "vitest": "^2.1.4"
   }
