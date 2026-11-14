@@ -207,7 +207,7 @@ export const BoardTab: React.FC = () => {
                 LIVE TEAM REGISTRY
               </span>
               <span className="font-mono text-[10px] px-1.5 py-0.2 rounded bg-zinc-800 text-zinc-300">
-                P95 &lt; 2MS
+                P95 &lt; 200MS
               </span>
             </div>
             <h1 className="text-lg font-bold text-zinc-100 tracking-tight mt-0.5">
