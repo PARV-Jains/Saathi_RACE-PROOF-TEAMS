@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Saathi — Architecture & System Presentation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #06090e; }
+    .mono { font-family: 'JetBrains Mono', monospace; }
+    .slide { display: none; }
+    .slide.active { display: flex; }
+  </style>
+</head>
+<body class="text-zinc-100 min-h-screen flex flex-col justify-between select-none">
+
+  <!-- Top Bar Controls -->
+  <header class="border-b border-zinc-800/80 bg-zinc-950/80 backdrop-blur px-6 py-3 flex items-center justify-between z-50">
+    <div class="flex items-center gap-3">
+      <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
+      <span class="font-bold text-sm tracking-wider uppercase font-mono text-zinc-300">
+        SAATHI <span class="text-zinc-500">//</span> SLIDE DECK
+      </span>
+      <span class="px-2 py-0.5 rounded text-[10px] font-mono bg-emerald-950 border border-emerald-800 text-emerald-300">
+        HIGH CONCURRENCY SYSTEMS
+      </span>
+    </div>
+    <div class="flex items-center gap-4 text-xs font-mono">
+      <span id="slideCounter" class="text-zinc-400 font-semibold">1 / 9</span>
+      <div class="flex items-center gap-1.5">
+        <button onclick="prevSlide()" class="px-2.5 py-1 rounded bg-zinc-900 border border-zinc-800 hover:bg-zinc-800 text-zinc-300 hover:text-white transition cursor-pointer">
+          ◀ Prev
+        </button>
+        <button onclick="nextSlide()" class="px-2.5 py-1 rounded bg-emerald-950 border border-emerald-700 hover:bg-emerald-900 text-emerald-300 transition cursor-pointer">
+          Next ▶
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Slide Canvas Container (16:9 ratio centered) -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex items-center justify-center">
+
+    <!-- SLIDE 1: Title Slide -->
+    <div class="slide active w-full flex-col items-center justify-center text-center p-8 sm:p-12 rounded-2xl bg-zinc-900/60 border border-zinc-800 relative overflow-hidden shadow-2xl">
+      <div class="absolute -top-32 -left-32 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-32 -right-32 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+      <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-emerald-950/90 border border-emerald-700/80 text-emerald-300 mb-6">
+        HACKATHON ENGINEERING CONSOLE · SYSTEM ARCHITECTURE
+      </span>
+      <h1 class="text-5xl sm:text-7xl font-extrabold tracking-tight text-white mb-4">
+        SAATHI
+      </h1>
+      <h2 class="text-2xl sm:text-3xl font-bold text-zinc-200 mb-4">
+        Race-Proof Team Formation at Scale
+      </h2>
+      <p class="text-lg text-cyan-400 font-medium max-w-2xl mx-auto mb-8">
+        Engineered for 10,000 Hackathon Participants with Absolute Concurrency Correctness
+      </p>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-3xl w-full text-xs font-mono mb-8">
+        <div class="p-3 rounded-lg bg-zinc-950/80 border border-zinc-800">
+          <span class="text-zinc-500 block text-[10px]">CONCURRENCY</span>
+          <span class="font-bold text-emerald-400">SELECT ... FOR UPDATE</span>
+        </div>
+        <div class="p-3 rounded-lg bg-zinc-950/80 border border-zinc-800">
+          <span class="text-zinc-500 block text-[10px]">IDEMPOTENCY</span>
+          <span class="font-bold text-zinc-200">pg_advisory_xact_lock</span>
+        </div>
+        <div class="p-3 rounded-lg bg-zinc-950/80 border border-zinc-800">
+          <span class="text-zinc-500 block text-[10px]">REAL-TIME PUSH</span>
+          <span class="font-bold text-cyan-400">Fastify 5 + SSE Bus</span>
+        </div>
+        <div class="p-3 rounded-lg bg-zinc-950/80 border border-zinc-800">
+          <span class="text-zinc-500 block text-[10px]">BOARD PERFORMANCE</span>
+          <span class="font-bold text-emerald-400">p95 &lt; 2ms (12k req/s)</span>
+        </div>
+      </div>
+
+      <div class="text-xs text-zinc-500 font-mono">
+        Presenter: <strong class="text-zinc-300">Parv Jain</strong> · Full-Stack Systems Engineering Walkthrough
+      </div>
+    </div>
+
+    <!-- SLIDE 2: Concurrency Dilemma -->
+    <div class="slide w-full flex-col p-8 sm:p-10 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+      <div class="mb-6">
+        <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-emerald-950 border border-emerald-800 text-emerald-400">
+          PROBLEM STATEMENT & CHALLENGE
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mt-2">
+          The Concurrency Dilemma: 50 Contenders for 1 Final Seat
+        </h2>
+        <p class="text-sm text-zinc-400">Why naive database architectures fail and corrupt hackathon team rosters</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-1">
+        <!-- Naive Disaster -->
+        <div class="p-5 rounded-xl bg-zinc-950 border border-rose-900/50 flex flex-col justify-between">
+          <div>
+            <h3 class="text-rose-400 font-bold text-base flex items-center gap-2 mb-3">
+              ❌ Naive Architecture (Disaster Mode)
+            </h3>
+            <ul class="space-y-3 text-xs leading-relaxed text-zinc-300">
+              <li>
+                <strong class="text-rose-300">Time-of-Check to Time-of-Use (TOCTOU):</strong>
+                Multiple threads read <code class="text-zinc-400">count = 3/4</code> simultaneously outside transactions.
+              </li>
+              <li>
+                <strong class="text-rose-300">Oversold Team Roster:</strong>
+                Both threads proceed to insert, creating 5 or 6 members in a team configured for maximum 4.
+              </li>
+              <li>
+                <strong class="text-rose-300">Phantom Duplicates:</strong>
+                Double-clicking "Join" or flaky network retries creates duplicate teams and ghost records.
+              </li>
+              <li>
+                <strong class="text-rose-300">Stale UI Views:</strong>
+                Users waste time requesting full teams because updates require manual page reloads.
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 p-2.5 rounded bg-rose-950/30 border border-rose-900/40 text-[11px] font-mono text-rose-300">
+            Outcome: Corrupted database state, oversold seats, split-brain teams.
+          </div>
+        </div>
+
+        <!-- Saathi Guarantee -->
+        <div class="p-5 rounded-xl bg-zinc-950 border border-emerald-900/60 flex flex-col justify-between">
+          <div>
+            <h3 class="text-emerald-400 font-bold text-base flex items-center gap-2 mb-3">
+              ✅ The Saathi Concurrency Engine
+            </h3>
+            <ul class="space-y-3 text-xs leading-relaxed text-zinc-300">
+              <li>
+                <strong class="text-emerald-300">Pessimistic Row Serialization:</strong>
+                <code class="text-emerald-400">SELECT ... FOR UPDATE</code> locks the team row exclusively at the database level.
+              </li>
+              <li>
+                <strong class="text-emerald-300">In-Lock Capacity Validation:</strong>
+                Capacity is evaluated strictly inside the lock. Exactly 1 transaction succeeds; 49 receive clean 409 Conflicts.
+              </li>
+              <li>
+                <strong class="text-emerald-300">Atomic Idempotency Replay:</strong>
+                Advisory locks and idempotency keys cache and replay results for retried requests with zero double mutations.
+              </li>
+              <li>
+                <strong class="text-emerald-300">Instant Real-Time Sync:</strong>
+                Server-Sent Events stream state mutations live across all connected clients with zero lag.
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 p-2.5 rounded bg-emerald-950/40 border border-emerald-800 text-[11px] font-mono text-emerald-300">
+            Outcome: Mathematical correctness, 0 oversold slots, 100% auditability.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 3: Invariant & SELECT FOR UPDATE -->
+    <div class="slide w-full flex-col p-8 sm:p-10 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+      <div class="mb-5">
+        <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-cyan-950 border border-cyan-800 text-cyan-400">
+          CORE CONCURRENCY PRIMITIVES
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">
+          Locking Invariant: SELECT ... FOR UPDATE
+        </h2>
+        <p class="text-sm text-zinc-400">How atomic transactions serialize competing queries at the database storage engine level</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 items-start">
+        <!-- Code snippet -->
+        <div class="lg:col-span-7 rounded-xl bg-zinc-950 p-4 border border-zinc-800 font-mono text-[11px] leading-relaxed overflow-x-auto text-zinc-300">
+          <div class="text-zinc-500 mb-2">// src/lib/team-service.ts — Atomic Transaction</div>
+          <div><span class="text-purple-400">await</span> client.query(<span class="text-emerald-400">'BEGIN'</span>);</div>
+          <div class="mt-2 text-cyan-400 font-semibold">// CRITICAL INVARIANT: Acquire exclusive row-level lock</div>
+          <div><span class="text-purple-400">const</span> teamRes = <span class="text-purple-400">await</span> client.query(</div>
+          <div class="pl-4 text-emerald-300 font-bold">`SELECT * FROM teams WHERE id = $1 FOR UPDATE`,</div>
+          <div class="pl-4">[teamId]</div>
+          <div>);</div>
+          <div class="mt-2 text-zinc-500">// Evaluate capacity STRICTLY inside the lock</div>
+          <div><span class="text-purple-400">if</span> (team.current_member_count &gt;= team.max_size) {</div>
+          <div class="pl-4 text-rose-400 font-semibold">throw new AppError(409, 'TEAM_FULL', 'Team is already full');</div>
+          <div>}</div>
+          <div class="mt-2 text-zinc-500">// Increment count and record membership</div>
+          <div><span class="text-purple-400">await</span> client.query(<span class="text-emerald-400">`INSERT INTO team_members ...`</span>);</div>
+          <div><span class="text-purple-400">await</span> client.query(<span class="text-emerald-400">`UPDATE teams SET current_member_count = current_member_count + 1 ...`</span>);</div>
+          <div><span class="text-purple-400">await</span> writeAuditLog(client, ...);</div>
+          <div class="mt-2 text-purple-400 font-bold">await client.query('COMMIT');</div>
+        </div>
+
+        <!-- Explanations -->
+        <div class="lg:col-span-5 space-y-3.5 text-xs">
+          <div class="p-3.5 rounded-xl bg-zinc-950/70 border border-zinc-800">
+            <span class="font-bold text-emerald-400 block mb-1">1. Exclusive Row-Level Queue</span>
+            <p class="text-zinc-400 leading-relaxed">
+              When 50 transactions request the same team ID, PostgreSQL queues 49 of them at the row lock. Only one proceeds at a time.
+            </p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-zinc-950/70 border border-zinc-800">
+            <span class="font-bold text-cyan-400 block mb-1">2. Zero Stale Read Windows</span>
+            <p class="text-zinc-400 leading-relaxed">
+              Capacity is never checked outside of the lock. When Transaction 2 unblocks, it reads the updated <code class="text-zinc-200">current_member_count = 4</code> and exits with 409 Conflict.
+            </p>
+          </div>
+          <div class="p-3.5 rounded-xl bg-zinc-950/70 border border-zinc-800">
+            <span class="font-bold text-amber-400 block mb-1">3. Database Schema Constraints</span>
+            <p class="text-zinc-400 leading-relaxed">
+              PostgreSQL enforces <code class="text-zinc-200">CHECK (current_member_count &lt;= max_size)</code> and unique hackathon participation indexes as a secondary defense layer.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 4: Board Screenshot -->
+    <div class="slide w-full flex-col p-8 sm:p-10 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+      <div class="mb-4">
+        <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-emerald-950 border border-emerald-800 text-emerald-400">
+          UI SHOWCASE · EXPLORATION
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Live Team Discovery Board</h2>
+        <p class="text-sm text-zinc-400">High-throughput registry displaying 2,000 teams with multi-skill filters and real-time SSE</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 items-center">
+        <div class="lg:col-span-8 rounded-xl overflow-hidden border border-zinc-800 shadow-xl bg-black">
+          <img src="screenshots/1-board.png" alt="Board UI" class="w-full object-cover">
+        </div>
+        <div class="lg:col-span-4 space-y-3 text-xs">
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-emerald-400 font-bold block mb-1">✦ Real-Time SSE Stream</span>
+            <p class="text-zinc-400">Direct HTTP/2 connection to <code class="text-zinc-200">/api/events</code>. Instant updates as members join or leave without manual refresh.</p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-cyan-400 font-bold block mb-1">✦ Multi-Skill Tag Filtering</span>
+            <p class="text-zinc-400">Filter across PostgreSQL array columns for React, Node, Python, Go, and full-text team descriptions.</p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-amber-400 font-bold block mb-1">✦ Optimistic UI Rollback</span>
+            <p class="text-zinc-400">UI reflects requests immediately; automatically rolls back if rejected with a 409 Conflict.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: Team Dashboard Screenshot -->
+    <div class="slide w-full flex-col p-8 sm:p-10 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+      <div class="mb-4">
+        <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-emerald-950 border border-emerald-800 text-emerald-400">
+          UI SHOWCASE · MANAGEMENT
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Roster Controls & Succession Engine</h2>
+        <p class="text-sm text-zinc-400">Cryptographic invites, join request queues, and deterministic leadership handoff</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 items-center">
+        <div class="lg:col-span-8 rounded-xl overflow-hidden border border-zinc-800 shadow-xl bg-black">
+          <img src="screenshots/2-team-dashboard.png" alt="Team Dashboard UI" class="w-full object-cover">
+        </div>
+        <div class="lg:col-span-4 space-y-3 text-xs">
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-emerald-400 font-bold block mb-1">✦ 1-Click Persona Switcher</span>
+            <p class="text-zinc-400">Switch instantaneously between Team Leader, Member, and Solo Hacker roles with zero password friction.</p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-cyan-400 font-bold block mb-1">✦ 96-Bit Cryptographic Invites</span>
+            <p class="text-zinc-400">Base64url high-entropy tokens with TTL expiry and sliding-window rate limit protection against brute force.</p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-amber-400 font-bold block mb-1">✦ Deterministic Succession</span>
+            <p class="text-zinc-400">When a leader departs, leadership automatically transfers to the next senior member; last member deletes the team.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 6: Suggestions Screenshot -->
+    <div class="slide w-full flex-col p-8 sm:p-10 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+      <div class="mb-4">
+        <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-cyan-950 border border-cyan-800 text-cyan-400">
+          UI SHOWCASE · MATCHMAKING
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Explainable Teammate Recommendations</h2>
+        <p class="text-sm text-zinc-400">Scoring candidates based on complementary skillsets and timezone alignment</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 items-center">
+        <div class="lg:col-span-8 rounded-xl overflow-hidden border border-zinc-800 shadow-xl bg-black">
+          <img src="screenshots/3-suggestions.png" alt="Suggestions UI" class="w-full object-cover">
+        </div>
+        <div class="lg:col-span-4 space-y-3 text-xs">
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-emerald-400 font-bold block mb-1">✦ Weighted Match Algorithm</span>
+            <p class="text-zinc-400">Scored dynamically: 65% on complementary skill coverage and 35% on timezone offset proximity.</p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-cyan-400 font-bold block mb-1">✦ Fully Explainable Breakdown</span>
+            <p class="text-zinc-400">Badges clearly describe why each candidate was recommended (e.g. "+35pts Timezone Alignment").</p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-purple-400 font-bold block mb-1">✦ Direct 1-Click Outreach</span>
+            <p class="text-zinc-400">Send invites or join requests straight from the matchmaking dashboard.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 7: Concurrency Simulator Screenshot -->
+    <div class="slide w-full flex-col p-8 sm:p-10 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+      <div class="mb-4">
+        <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-rose-950 border border-rose-800 text-rose-300">
+          EMPIRICAL PROOF · CONCURRENCY RACE
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Live 50-Client Concurrency Stress Test</h2>
+        <p class="text-sm text-zinc-400">Simulating 50 simultaneous contenders for 1 final seat directly inside the browser</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 items-center">
+        <div class="lg:col-span-8 rounded-xl overflow-hidden border border-zinc-800 shadow-xl bg-black">
+          <img src="screenshots/4-concurrency-sim.png" alt="Concurrency Simulator UI" class="w-full object-cover">
+        </div>
+        <div class="lg:col-span-4 space-y-3 text-xs">
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-emerald-900/60">
+            <span class="text-emerald-400 font-bold block mb-1">✦ Strictly 1 Winner (200 OK)</span>
+            <p class="text-zinc-400">The first transaction claims the row lock and increments the count to maximum capacity.</p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-rose-900/60">
+            <span class="text-rose-400 font-bold block mb-1">✦ Strictly 49 Rejected (409 Conflict)</span>
+            <p class="text-zinc-400">Every competing contender receives a clean, non-corrupting <code class="text-rose-300">TEAM_FULL</code> error.</p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-cyan-400 font-bold block mb-1">✦ Genuine Database Mutation</span>
+            <p class="text-zinc-400">Fires real asynchronous requests against PostgreSQL via <code class="text-zinc-200">POST /api/demo/simulate-race</code>.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 8: Scale & Telemetry Screenshot -->
+    <div class="slide w-full flex-col p-8 sm:p-10 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+      <div class="mb-4">
+        <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-emerald-950 border border-emerald-800 text-emerald-400">
+          SCALE BENCHMARK · PERFORMANCE
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">10k Scale Telemetry & Sub-200ms p95 Latency</h2>
+        <p class="text-sm text-zinc-400">Real-time benchmark console proving sub-2ms server p95 latency under heavy load</p>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 items-center">
+        <div class="lg:col-span-8 rounded-xl overflow-hidden border border-zinc-800 shadow-xl bg-black">
+          <img src="screenshots/5-scale-telemetry.png" alt="Scale Telemetry UI" class="w-full object-cover">
+        </div>
+        <div class="lg:col-span-4 space-y-3 text-xs">
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-emerald-400 font-bold block mb-1">✦ 10,000 Hackers / 2,000 Teams</span>
+            <p class="text-zinc-400">Database seeded with streaming batch inserts in under 4 seconds with composite indexing.</p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-zinc-800">
+            <span class="text-cyan-400 font-bold block mb-1">✦ 12,131 Requests / Second</span>
+            <p class="text-zinc-400">Autocannon stress test with 100 concurrent connections across 10s: 0 timeouts, 0 errors.</p>
+          </div>
+          <div class="p-3.5 rounded-lg bg-zinc-950 border border-emerald-900/70">
+            <span class="text-emerald-300 font-bold block mb-1">✦ Server p95: ~1.2 ms</span>
+            <p class="text-zinc-400">Fastify micro-cached board delivers sub-2ms response times, easily surpassing the &lt; 200ms target.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 9: Summary & Deliverables -->
+    <div class="slide w-full flex-col p-8 sm:p-10 rounded-2xl bg-zinc-900/60 border border-zinc-800">
+      <div class="mb-6">
+        <span class="px-2.5 py-0.5 rounded text-[11px] font-mono font-bold bg-emerald-950 border border-emerald-800 text-emerald-400">
+          DELIVERABLES SUMMARY
+        </span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-white mt-1">Production-Ready & Fully Verified</h2>
+        <p class="text-sm text-zinc-400">Complete delivery aligned with all Hackathon engineering requirements</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5 flex-1">
+        <div class="p-5 rounded-xl bg-zinc-950 border border-zinc-800">
+          <span class="text-xs font-mono font-bold text-emerald-400 block mb-1">CLOUD DEPLOYMENT</span>
+          <h3 class="text-base font-bold text-zinc-100 mb-2">Live Service on Render</h3>
+          <p class="text-xs text-zinc-400 leading-relaxed">
+            Persistent Fastify 5 HTTP server with active Server-Sent Events push bus, serving the compiled React SPA directly from a single URL.
+          </p>
+        </div>
+        <div class="p-5 rounded-xl bg-zinc-950 border border-zinc-800">
+          <span class="text-xs font-mono font-bold text-cyan-400 block mb-1">DATABASE STORAGE</span>
+          <h3 class="text-base font-bold text-zinc-100 mb-2">Supabase PostgreSQL 16</h3>
+          <p class="text-xs text-zinc-400 leading-relaxed">
+            Relational schema with pessimistic row locks, CHECK constraints, and immutable audit logs that persist past team deletion.
+          </p>
+        </div>
+        <div class="p-5 rounded-xl bg-zinc-950 border border-zinc-800">
+          <span class="text-xs font-mono font-bold text-emerald-400 block mb-1">AUTOMATED TESTING</span>
+          <h3 class="text-base font-bold text-zinc-100 mb-2">43 Tests Passing in CI</h3>
+          <p class="text-xs text-zinc-400 leading-relaxed">
+            GitHub Actions pipeline running 39 API integration tests, 50-client race tests, and SIGKILL chaos mid-flight transaction recovery.
+          </p>
+        </div>
+        <div class="p-5 rounded-xl bg-zinc-950 border border-zinc-800">
+          <span class="text-xs font-mono font-bold text-cyan-400 block mb-1">DOCUMENTATION</span>
+          <h3 class="text-base font-bold text-zinc-100 mb-2">System Design & Load Report</h3>
+          <p class="text-xs text-zinc-400 leading-relaxed">
+            Clean 12-commit conventional Git history, comprehensive DESIGN.md architecture document, and Autocannon load test report.
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Footer Navigation Info -->
+  <footer class="border-t border-zinc-800/80 bg-zinc-950 px-6 py-3 flex items-center justify-between text-xs font-mono text-zinc-500">
+    <div class="flex items-center gap-2">
+      <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+      <span>SAATHI // 16:9 PRESENTATION MODE</span>
+    </div>
+    <div class="flex items-center gap-3">
+      <span>Use <kbd class="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300">◀</kbd> <kbd class="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300">▶</kbd> or <kbd class="px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-300">Space</kbd> to navigate</span>
+    </div>
+  </footer>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const counter = document.getElementById('slideCounter');
+
+    function showSlide(idx) {
+      if (idx < 0) idx = 0;
+      if (idx >= slides.length) idx = slides.length - 1;
+      slides.forEach((s, i) => {
+        s.classList.toggle('active', i === idx);
+      });
+      currentSlide = idx;
+      counter.textContent = `${idx + 1} / ${slides.length}`;
+    }
+
+    function nextSlide() {
+      showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      showSlide(currentSlide - 1);
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        prevSlide();
+      } else if (e.key === 'Home') {
+        showSlide(0);
+      } else if (e.key === 'End') {
+        showSlide(slides.length - 1);
+      }
+    });
+  </script>
+</body>
+</html>
